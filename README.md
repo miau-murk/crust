@@ -2,9 +2,14 @@
 
 Building rust/C++ project
 
-To create project insure that you have `cargo` and g++ in your system. Than download files from repo and write in cmd:
+Take your `test.cpp` and `test.sh` into same folder. Than write in cmd:
 
 ```bash
-cargo build
-cargo run
+sh test.sh
+```
+
+Your compiled file `nuts_impl` will be in `crust/turget/release/`. Run it:
+
+```bash
+./nuts_impl
 ```
