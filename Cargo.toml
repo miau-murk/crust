@@ -3,6 +3,10 @@ name = "nuts_impl"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "nuts_impl"
+crate-type = ["cdylib"]  # Для создания .so файла
+
 [dependencies]
 rand = "0.9.1"
 thiserror = "2.0.1"
