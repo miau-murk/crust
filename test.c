@@ -2,9 +2,9 @@
 #include "nuts_impl.h"
 
 int main() {
-    size_t num_samples = 10;
-    size_t dim = 2;
-    double initial_positions[] = {1.0, -1.0};
+    size_t num_samples = 100;
+    size_t dim = 3;
+    double initial_positions[] = {1.0, -1.0, 0.5};
     
     double* samples = generate_samples(num_samples, initial_positions, dim);
     
