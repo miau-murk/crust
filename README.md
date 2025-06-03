@@ -1,17 +1,16 @@
 # crust
 
-Building rust/C++ project
-
-Take your `test.cpp` and `test.sh` into same folder. Than write in cmd:
-
-```bash
-sh crust.sh
 ```
+#!/bin/bash
 
-Your compiled file `nuts_impl` will be in `crust/turget/release/`. Run it:
+# download cargo Rust compiler
+curl https://sh.rustup.rs -sSf | bash -s -- -y
+source "$HOME/.cargo/env"
 
-```bash
-./nuts_impl
+# cloning project repository
+git clone https://github.com/miau-murk/crust.git
+cd crust || exit 1
+
+# building project
+cargo build --verbose --release
 ```
-
-You also can find `.so` file in this directory.
