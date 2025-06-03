@@ -29,13 +29,13 @@ The `build_c` folder contains functions implementing a multivariate normal distr
 cargo build --verbose --release
 ```
 
-After building the program, you will find the dynamic library `libnuts_impl.so` in the target/release folder. An example of how to link the library to C++ code can be found in the files `nuts_impl.h` and `test.cpp`. The function takes the number of samples and the parameter space dimension as input. To run the program, use the following commands:
+After building the program, you will find the dynamic library `libnuts_impl.so` in the `target/release` folder. An example of how to link the library to C++ code can be found in the files `nuts_impl.h` and `test.cpp`. The function takes the number of samples and the parameter space dimension as input. To run the program, use the following commands:
 
 ```bash
 gcc test.cpp -o test -L./target/release -lnuts_impl
 LD_LIBRARY_PATH=./target/release ./test
 ```
 
-After executing these commands, a file named samples.log will be created in the project folder, containing the generated samples and the mean for each coordinate.
+After executing these commands, a file named `samples.log` will be created in the project folder, containing the generated samples and the mean for each coordinate.
 
-To sample from custom functions, you need to create a function named `logpc` in the file `build_c/logpc.cpp`, similar to the original one. All files imported into your `logpc.cpp` script must either be located in the `build_c` folder or be provided as static libraries.
+To sample from custom functions, you need to create a function named `logpc` in the file `build_c/logpc.cpp`, with similar structure to the original one. All files imported into your `logpc.cpp` script must either be located in the `build_c` folder or be provided as static libraries.
