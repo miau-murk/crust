@@ -1,6 +1,8 @@
 use nuts_rs::{CpuLogpFunc, CpuMath, LogpError, DiagGradNutsSettings, Chain, Settings};
 use thiserror::Error;
 use rand::thread_rng;
+use std::fs::File;
+use std::io::Write;
 
 extern "C" {
     fn logpc(position: *const f64, grad: *mut f64, dim: usize) -> f64;
@@ -34,6 +36,11 @@ pub extern "C" fn generate_samples(
     initial_positions: *const f64,
     dim: usize
 ) -> *mut f64 {
+    // Создаем файл для логирования
+    let mut log_file = File::create("samples.log").expect("Failed to create log file");
+    writeln!(log_file, "Dimensions: {}\tTotal samples: {}", dim, num_samples)
+        .expect("Failed to write to log file");
+
     let mut settings = DiagGradNutsSettings::default();
     settings.num_tune = 50;
     settings.maxdepth = 10;
@@ -47,11 +54,35 @@ pub extern "C" fn generate_samples(
     sampler.set_position(initial_positions_slice).expect("Unrecoverable error during init");
     
     let mut trace = Vec::with_capacity(num_samples * dim);
-    for _ in 0..num_samples {
+    let mut sum = vec![0.0; dim];
+    
+    for i in 0..num_samples {
         let (draw, _progress) = sampler.draw().expect("Unrecoverable error during sampling");
+        
+        // Логируем каждый сэмпл (без слова Sample и скобок, с табуляцией)
+        let sample_str = draw.iter()
+            .map(|x| x.to_string())
+            .collect::<Vec<_>>()
+            .join("\t");
+        writeln!(log_file, "{}", sample_str)
+            .expect("Failed to write sample to log file");
+        
+        // Суммируем для вычисления среднего
+        for (j, &value) in draw.iter().enumerate() {
+            sum[j] += value;
+        }
+        
         trace.extend_from_slice(&draw);
-        // println!("{:?}", _progress);
     }
+
+    // Вычисляем и записываем среднее значение
+    let mean: Vec<f64> = sum.iter().map(|&s| s / num_samples as f64).collect();
+    let mean_str = mean.iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<_>>()
+        .join("\t");
+    writeln!(log_file, "\nMean:\t{}", mean_str)
+        .expect("Failed to write mean to log file");
 
     let boxed_slice = trace.into_boxed_slice();
     Box::into_raw(boxed_slice) as *mut f64
