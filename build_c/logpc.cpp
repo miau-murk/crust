@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath>
+#include <bits/stdc++.h>
+#include "some_func.h"
 
 // Multivariate normal distribution log probability and gradient
 extern "C" {
@@ -11,8 +13,8 @@ extern "C" {
             const double mu = 0.0;       // Mean for each dimension
             const double sigma = 1.0;    // Std dev for each dimension
             const double diff = position[i] - mu;
-            logp += -0.5 * diff * diff / (sigma * sigma);
-            grad[i] = -diff / (sigma * sigma);
+            logp += -0.5 * diff * somefunc(diff, sigma);
+            grad[i] = -somefunc(diff, sigma);
         }
         
         return logp;
