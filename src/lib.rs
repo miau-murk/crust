@@ -36,7 +36,7 @@ pub extern "C" fn generate_samples(
     initial_positions: *const f64,
     dim: usize
 ) -> *mut f64 {
-    // Создаем файл для логирования
+    // create .log file
     let mut log_file = File::create("samples.log").expect("Failed to create log file");
     writeln!(log_file, "Dimensions: {}\tTotal samples: {}", dim, num_samples)
         .expect("Failed to write to log file");
@@ -59,7 +59,7 @@ pub extern "C" fn generate_samples(
     for i in 0..num_samples {
         let (draw, _progress) = sampler.draw().expect("Unrecoverable error during sampling");
         
-        // Логируем каждый сэмпл (без слова Sample и скобок, с табуляцией)
+        // log each sample
         let sample_str = draw.iter()
             .map(|x| x.to_string())
             .collect::<Vec<_>>()
@@ -67,7 +67,6 @@ pub extern "C" fn generate_samples(
         writeln!(log_file, "{}", sample_str)
             .expect("Failed to write sample to log file");
         
-        // Суммируем для вычисления среднего
         for (j, &value) in draw.iter().enumerate() {
             sum[j] += value;
         }
@@ -75,7 +74,7 @@ pub extern "C" fn generate_samples(
         trace.extend_from_slice(&draw);
     }
 
-    // Вычисляем и записываем среднее значение
+    // calculate mean value
     let mean: Vec<f64> = sum.iter().map(|&s| s / num_samples as f64).collect();
     let mean_str = mean.iter()
         .map(|x| x.to_string())
