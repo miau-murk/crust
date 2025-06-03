@@ -6,10 +6,11 @@ This project enables sampling from distributions with a custom .cpp density func
 
 First, install the Rust Cargo compiler:
 
-````bash
+```bash
 # Download and install Rust compiler
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 source "$HOME/.cargo/env"
+```
 
 After successful installation, clone this repository to your local folder:
 
@@ -17,7 +18,7 @@ After successful installation, clone this repository to your local folder:
 # cloning project repository
 git clone https://github.com/miau-murk/crust.git
 cd crust || exit 1
-````
+```
 
 The core of the program is located in `src/lib.rs`, which facilitates the interaction between C++ functions and the functionality of [nuts-rs](https://github.com/pymc-devs/nuts-rs), as well as logging statistics. The Cargo.toml file is required for Rust module dependencies.
 
