@@ -4,7 +4,13 @@ This project enables sampling from distributions with a custom .cpp density func
 
 ## Quick start
 
-To start using project download [crust.sh](https://github.com/miau-murk/crust/releases/tag/%23crust). This is a bash-script, that enables nuts sampling from C++ density function. Run this file in your empty folder, `nuts_impl.so` file with be in `/crust/target/release`. After building run following commands to start sampling:
+To start using project download [crust.sh](https://github.com/miau-murk/crust/releases/tag/%23crust). This is a bash-script, that enables nuts sampling from C++ density function. Run this file in your empty folder:
+
+```bash
+. crust.sh
+```
+
+`nuts_impl.so` file with be in `/crust/target/release`. After building run following commands to start sampling:
 
 ```bash
 gcc test.cpp -o test -L./target/release -lnuts_impl
