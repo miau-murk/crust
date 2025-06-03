@@ -2,7 +2,18 @@
 
 This project enables sampling from distributions with a custom .cpp density function using [nuts-rs](https://github.com/pymc-devs/nuts-rs) on Linux systems.
 
-## Installation
+## Quick start
+
+To start using project download [crust.sh](https://github.com/miau-murk/crust/releases/tag/%23crust). This is a bash-script, that enables nuts sampling from C++ density function. Run this file in your empty folder, `nuts_impl.so` file with be in `/crust/target/release`. After building run following commands to start sampling:
+
+```bash
+gcc test.cpp -o test -L./target/release -lnuts_impl
+LD_LIBRARY_PATH=./target/release ./test
+```
+
+You can find all samples and mean values in `/crust/samples.log` file.
+
+## Detailed installation and using custom densities
 
 First, install the Rust Cargo compiler:
 
@@ -26,7 +37,7 @@ The `build_c` folder contains functions implementing a multivariate normal distr
 
 ```bash
 # building project
-cargo build --verbose --release
+cargo build --release
 ```
 
 After building the program, you will find the dynamic library `libnuts_impl.so` in the `target/release` folder. An example of how to link the library to C++ code can be found in the files `nuts_impl.h` and `test.cpp`. The function takes the number of samples and the parameter space dimension as input. To run the program, use the following commands:
