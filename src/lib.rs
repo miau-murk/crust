@@ -35,7 +35,7 @@ pub extern "C" fn generate_samples(
     dim: usize
 ) -> *mut f64 {
     let mut settings = DiagGradNutsSettings::default();
-    settings.num_tune = 500;
+    settings.num_tune = 50;
     settings.maxdepth = 10;
 
     let logp_func = PosteriorDensity { dim };
@@ -50,6 +50,7 @@ pub extern "C" fn generate_samples(
     for _ in 0..num_samples {
         let (draw, _progress) = sampler.draw().expect("Unrecoverable error during sampling");
         trace.extend_from_slice(&draw);
+        // println!("{:?}", _progress);
     }
 
     let boxed_slice = trace.into_boxed_slice();
