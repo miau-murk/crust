@@ -11,7 +11,7 @@ fn main() -> io::Result<()> {
     let out_path = Path::new(&out_dir);
     let cpp_dir = "build_c"; // Директория с C++ файлами
 
-    // 1. Находим все C++ файлы в директории
+    // 1. We find all the C++ files in the directory
     let cpp_files = find_cpp_files(cpp_dir)?;
     if cpp_files.is_empty() {
         return Err(io::Error::new(
@@ -20,7 +20,7 @@ fn main() -> io::Result<()> {
         ));
     }
 
-    // 2. Компилируем каждый C++ файл в объектный файл
+    // 2. Compile each C++ file into an object file
     let mut obj_files = Vec::new();
     for cpp_file in &cpp_files {
         let obj_file = out_path.join(
@@ -35,20 +35,20 @@ fn main() -> io::Result<()> {
         obj_files.push(obj_file);
     }
 
-    // 3. Создаем статическую библиотеку из всех объектных файлов
+    // 3. Creating a static library from all the object files
     let lib_file = out_path.join("liblogpc.a");
     create_static_library(&obj_files, &lib_file)?;
 
-    // 4. Настройка линковки
+    // 4. Linking settings
     println!("cargo:rustc-link-search=native={}", out_dir);
     println!("cargo:rustc-link-lib=static=logpc");
-    println!("cargo:rustc-link-lib=dylib=stdc++");  // Явная линковка с C++ stdlib
+    println!("cargo:rustc-link-lib=dylib=stdc++");  // Explicit linking with C++ stdlib
 
 
     Ok(())
 }
 
-/// Находит все .cpp файлы в указанной директории
+/// Finds all .cpp files in the specified directory
 fn find_cpp_files(dir: &str) -> io::Result<Vec<PathBuf>> {
     let mut files = Vec::new();
     for entry in fs::read_dir(dir)? {
@@ -61,7 +61,7 @@ fn find_cpp_files(dir: &str) -> io::Result<Vec<PathBuf>> {
     Ok(files)
 }
 
-/// Компилирует один C++ файл в объектный файл
+/// Compiles a single C++ file into an object file
 fn compile_cpp_file(cpp_file: &Path, obj_file: &Path) -> io::Result<()> {
     let status = Command::new("g++")
         .args(&[
@@ -71,9 +71,9 @@ fn compile_cpp_file(cpp_file: &Path, obj_file: &Path) -> io::Result<()> {
             "-o",
             obj_file.to_str().unwrap(),
             "-Wall",
-            "-Wextra",      // Дополнительные предупреждения
+            "-Wextra",     
             "-std=c++11",
-            "-O2",          // Оптимизация
+            "-O2",
         ])
         .status()?;
 
@@ -87,7 +87,7 @@ fn compile_cpp_file(cpp_file: &Path, obj_file: &Path) -> io::Result<()> {
     }
 }
 
-/// Создает статическую библиотеку из объектных файлов
+/// Creates a static library from object files
 fn create_static_library(obj_files: &[PathBuf], lib_file: &Path) -> io::Result<()> {
     let mut args = vec!["crus", lib_file.to_str().unwrap()];
     args.extend(obj_files.iter().map(|f| f.to_str().unwrap()));
